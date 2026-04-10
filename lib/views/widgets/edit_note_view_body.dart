@@ -1,22 +1,57 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:note_app/cubits/notes_cubit/notes_cubit_cubit.dart';
+import 'package:note_app/models/note_model.dart';
+
 import 'package:note_app/views/widgets/custom_app_bar.dart';
 import 'package:note_app/views/widgets/custom_text_field.dart';
 
-class EditNoteViewBody extends StatelessWidget {
-  const EditNoteViewBody({super.key});
+class EditNoteViewBody extends StatefulWidget {
+  const EditNoteViewBody({super.key, required this.note});
+  final NoteModel note;
+
+  @override
+  State<EditNoteViewBody> createState() => _EditNoteViewBodyState();
+}
+
+class _EditNoteViewBodyState extends State<EditNoteViewBody> {
+  String? title;
+  String? content;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24),
-      child: const Column(
+      child: Column(
         children: [
-          SizedBox(height: 50),
-          CustomAppBar(title: "Edit Note", icon: Icons.check),
-          SizedBox(height: 50),
-          CustomTextFormField(hintText: "title", maxLines: 1),
-          SizedBox(height: 16),
-          CustomTextFormField(hintText: "Content", maxLines: 5),
+          const SizedBox(height: 50),
+          CustomAppBar(
+            title: "Edit Note",
+            icon: Icons.check,
+            onPressed: () {
+              widget.note.title = title ?? widget.note.title;
+              widget.note.subtitle = content ?? widget.note.subtitle;
+              widget.note.save();
+              BlocProvider.of<NotesCubitCubit>(context).featchAllNotes();
+              Navigator.pop(context);
+            },
+          ),
+          const SizedBox(height: 50),
+          CustomTextFormField(
+            hintText: widget.note.title,
+            maxLines: 1,
+            onChanged: (data) {
+              title = data;
+            },
+          ),
+          const SizedBox(height: 16),
+          CustomTextFormField(
+            hintText: widget.note.subtitle,
+            maxLines: 5,
+            onChanged: (data) {
+              content = data;
+            },
+          ),
         ],
       ),
     );
