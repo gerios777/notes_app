@@ -9,12 +9,12 @@ class SimpleBlocObserver implements BlocObserver {
 
   @override
   void onClose(BlocBase<dynamic> bloc) {
-    debugPrint("Close = ${bloc}");
+    debugPrint("Close = $bloc");
   }
 
   @override
   void onCreate(BlocBase<dynamic> bloc) {
-    debugPrint("Create = ${bloc}");
+    debugPrint("Create = $bloc");
   }
 
   @override
